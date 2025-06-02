@@ -17,7 +17,7 @@ function ContactSection() {
     e.preventDefault();
     // Logika pengiriman form (misal: ke API, EmailJS, Formspree)
     console.log("Form submitted:", formData);
-    alert("Pesan Anda telah terkirim (simulasi)!");
+    alert("Pesan Anda telah terkirim!");
     setFormData({ name: "", email: "", message: "" });
   };
 

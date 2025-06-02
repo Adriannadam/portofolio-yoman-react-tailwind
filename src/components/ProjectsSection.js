@@ -5,12 +5,12 @@ import ProjectCard from "./ProjectCard";
 
 const projectsData = [
   {
-    title: "Proyek 1: Aplikasi To-Do List",
+    title: "Proyek 1: Portofolio Website",
     description:
-      "Aplikasi manajemen tugas sederhana dibangun dengan React dan state management dasar.",
+      "Website Portofolio simple yang dibangun dengan React dan state management dasar.",
     // Ganti dengan URL gambar yang relevan atau placeholder
-    imageUrl: "https://via.placeholder.com/400x200.png?text=Proyek+1",
-    codeLink: "https://github.com/yourusername/project1",
+    imageUrl: "/1.png",
+    codeLink: "https://github.com/Adriannadam/portofolio-yoman-react-tailwind",
     liveLink: "#", // Jika ada live demo
     technologies: ["React", "JavaScript", "CSS"],
   },
