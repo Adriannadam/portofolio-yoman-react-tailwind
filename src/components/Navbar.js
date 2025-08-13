@@ -33,7 +33,7 @@ function Navbar() {
     { href: "#hero", label: "Home" },
     { href: "#about", label: "Tentang" }, // Jika Anda membuat section 'Tentang'
     { href: "#skills", label: "Keahlian" },
-    { href: "#projects", label: "Proyek" },
+    { href: "#project", label: "Proyek" },
     { href: "#contact", label: "Kontak" },
   ];
 

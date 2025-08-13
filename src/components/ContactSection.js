@@ -1,91 +1,163 @@
 // src/components/ContactSection.js
-import React, { useState } from "react";
+
+import React, { useRef, useState } from "react"; // <-- 1. IMPORT hooks yang diperlukan
 import SectionTitle from "./Sectiontitle";
+import {
+  FaGithub,
+  FaLinkedin,
+  FaEnvelope,
+  FaInstagram,
+  FaWhatsapp,
+} from "react-icons/fa";
+import emailjs from "@emailjs/browser";
 
 function ContactSection() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const form = useRef();
+  const [status, setStatus] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const sendEmail = (event) => {
+    event.preventDefault();
+    setStatus("Mengirim...");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Logika pengiriman form (misal: ke API, EmailJS, Formspree)
-    console.log("Form submitted:", formData);
-    alert("Pesan Anda telah terkirim!");
-    setFormData({ name: "", email: "", message: "" });
+    emailjs
+      .sendForm(
+        process.env.REACT_APP_EMAILJS_SERVICE_ID,
+        process.env.REACT_APP_EMAILJS_TEMPLATE_ID,
+        form.current,
+        process.env.REACT_APP_EMAILJS_PUBLIC_KEY
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          setStatus("Pesan berhasil terkirim!");
+          form.current.reset();
+        },
+        (error) => {
+          console.log(error.text);
+          setStatus("Gagal mengirim pesan. Coba lagi.");
+        }
+      );
   };
 
   return (
-    <section id="contact" className="py-16 bg-white dark:bg-gray-800">
-      <div className="max-w-screen-md mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionTitle>Hubungi Saya</SectionTitle>
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Nama
-            </label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700"
-            />
+    <section id="kontak" className="py-20 bg-gray-100 dark:bg-slate-900">
+      <div className="container mx-auto px-4">
+        <SectionTitle>Mari Terhubung</SectionTitle>
+        <p className="text-center max-w-2xl mx-auto text-gray-600 dark:text-gray-300 mt-4 mb-12">
+          Saya selalu terbuka untuk diskusi mengenai proyek baru atau peluang
+          kolaborasi. Jangan ragu untuk mengirimkan pesan.
+        </p>
+        <div className="max-w-xl mx-auto">
+          <form ref={form} onSubmit={sendEmail} className="space-y-6">
+            {/* ... bagian input form tetap sama ... */}
+            <div>
+              <label
+                htmlFor="nama"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1"
+              >
+                Nama
+              </label>
+              <input
+                type="text"
+                id="nama"
+                name="nama"
+                required
+                className="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                className="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="pesan"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1"
+              >
+                Pesan
+              </label>
+              <textarea
+                id="pesan"
+                name="pesan"
+                rows="4"
+                required
+                className="w-full px-4 py-2 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              ></textarea>
+            </div>
+            <div className="text-center">
+              <button
+                type="submit"
+                className="px-8 py-3 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 transition-colors duration-300"
+              >
+                Kirim Pesan
+              </button>
+              {status && (
+                <p className="mt-4 text-sm text-gray-600 dark:text-gray-300">
+                  {status}
+                </p>
+              )}
+            </div>
+          </form>
+
+          {/* --- IKON SOSIAL MEDIA --- */}
+          <div className="text-center mt-12">
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
+              Atau hubungi saya melalui:
+            </p>
+            <div className="flex justify-center space-x-6">
+              <a
+                href="https://github.com/Adriannadam"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+              >
+                <FaGithub size={30} />
+              </a>
+              <a
+                href="#"
+                /* Ganti dengan URL LinkedIn Anda */ target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+              >
+                <FaLinkedin size={30} />
+              </a>
+              <a
+                href="mailto:adrianadam120@gmail.com"
+                /* Ganti dengan email Anda */ className="text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+              >
+                <FaEnvelope size={30} />
+              </a>
+              <a
+                href="#"
+                /* Ganti dengan URL Instagram Anda */ target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+              >
+                <FaInstagram size={30} />
+              </a>
+              <a
+                href="https://wa.me/628123456789"
+                /* Ganti dengan nomor WhatsApp Anda */ target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-500 dark:text-gray-400 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
+              >
+                <FaWhatsapp size={30} />
+              </a>
+            </div>
           </div>
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700"
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="message"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Pesan
-            </label>
-            <textarea
-              name="message"
-              id="message"
-              rows="4"
-              value={formData.message}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700"
-            ></textarea>
-          </div>
-          <div>
-            <button
-              type="submit"
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
-            >
-              Kirim Pesan
-            </button>
-          </div>
-        </form>
+        </div>{" "}
+        {/* <-- 2. Ini adalah penutup untuk <div className="max-w-xl mx-auto"> */}
       </div>
     </section>
   );
